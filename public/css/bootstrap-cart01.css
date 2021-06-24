@@ -1,0 +1,28 @@
+.cart-block{
+    width: 100%;
+    background-color: #D1D5DB;
+    margin: 0 auto;
+    padding: 3% 0;
+    display: flex;
+    justify-content: center;
+}
+
+.cart-detail{ 
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 5px;
+    min-width:320px;
+    max-width:950px;
+    width:70%;
+    height:95%;
+    background-color: #F3F4F6;
+}
+
+.number{
+    width: 40px;
+    height: 40px;
+    background-color: 	rgb(16,185,129);
+    border-radius: 50%;
+    color: #FFF;
+    text-align: center;
+    line-height: 40px;
+}

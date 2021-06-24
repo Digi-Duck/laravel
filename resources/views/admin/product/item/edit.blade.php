@@ -7,10 +7,20 @@
         .card-header h2 {
             margin-bottom: 0;
         }
+        .product-img{
+            width: 200px;
+            height: 200px;
+            border: 1px solid #000;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
 
         .del-img-btn {
             position: absolute;
-            right: 10px;
+            right: -10px;
             top: -10px;
             width: 25px;
             height: 25px;
@@ -22,7 +32,7 @@
             border-radius: 50%;
             cursor: pointer;
         }
-
+       
     </style>
 @endsection
 
@@ -51,7 +61,7 @@
 
                             <div class="form-group">
                                 <label for="product_type_id">產品種類</label>
-                                <select class="form-control" id="product_type_id" name="product_type_id">
+                                <select class="form-control" id="product_type_id" name="product_type_id" required>
                                     @foreach ($type as $item)
                                         <option @if($item->id === $record->type->id) selected  @endif value="{{ $item->id }}">{{ $item->type_name }}</option>
                                     @endforeach
@@ -60,12 +70,12 @@
 
                             <div class="form-group">
                                 <label for="product_name">產品品項名稱</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $record->product_name }}">
+                                <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $record->product_name }}" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="price">價格</label>
-                                <input type="text" class="form-control" id="price" name="price" value="{{ $record->price }}">
+                                <input type="text" class="form-control" id="price" name="price" value="{{ $record->price }}" required>
                             </div>
                             <hr>
                             <div class="form-group row">
@@ -80,14 +90,13 @@
                             </div>
                             <hr>
                             {{-- 要讓使用者可以在編輯資料時砍掉關聯的圖片 --}}
-                            <div class="form-group row">
+                            <div class="form-group d-flex flex-wrap">
                                 <label class="col-12" for="">產品其他圖片</label>
                                 @foreach ($record->photos as $photo)
-                                <div class="col-md-3">
+                                <div class="product-img" style="background-image: url('{{ asset($photo->photo) }}')">
                                     {{-- 點選到圖片刪除按鈕時，將該圖片的 ID 記錄下來，傳到後端 --}}
                                     {{-- 後端根據 ID 找到該筆資料，進行刪除 --}}
                                     <div data-id="{{ $photo->id }}" class="del-img-btn">x</div>
-                                    <img class="w-100" src="{{ $photo->photo }}" alt="">
                                 </div>
                                 @endforeach
                             </div>
@@ -98,7 +107,7 @@
                             <hr>
                             <div class="form-group">
                                 <label for="discript">產品描述</label>
-                                <textarea class="form-control" name="discript" id="discript" cols="30" rows="10">{{ $record->discript }}</textarea>
+                                <textarea class="form-control" name="discript" id="discript" cols="30" rows="10" required>{{ $record->discript }}</textarea>
                             </div>
 
 							<button type="submit" class="btn btn-primary">編輯</button>

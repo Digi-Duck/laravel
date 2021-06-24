@@ -13,14 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'FrontController@index');
+
+Route::prefix('shopping_cart')->group(function () {
+    Route::get('step01','FrontController@step01');
+    Route::get('step02','FrontController@step02');
+    Route::get('step03','FrontController@step03');
+    Route::get('step04','FrontController@step04');
 });
 
 Route::prefix('contact_us')->group(function () {
     Route::get('/','FrontController@contactUs');
     Route::post('/store','ContactUsController@store');
 });
+
+Route::get('product','FrontController@product');
+
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
     Route::get('/', 'HomeController@index')->name('home');
@@ -57,6 +65,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function() {
             Route::get('/create', 'ProductController@create');
             Route::post('/store', 'ProductController@store');
             Route::get('/edit/{id}', 'ProductController@edit');
+            Route::post('/update/{id}', 'ProductController@update');
+            Route::delete('/delete/{id}', 'ProductController@delete');
             Route::post('/deleteImage', 'ProductController@deleteImage');
         });
     });
