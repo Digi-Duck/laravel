@@ -16,6 +16,8 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
    
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    
     <style>
         * {
             box-sizing: border-box;
@@ -78,7 +80,7 @@
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-body ml-3" href="#">Blog</a>
+                            <a class="nav-link text-body ml-3" href="{{asset('product')}}">Product</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-body ml-3" href="#">Portfolio</a>
@@ -90,7 +92,7 @@
                             <a class="nav-link text-body ml-3" href="#">Contact</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-body ml-3" href="./bootstrap-cart01.html"><i
+                            <a class="nav-link text-body ml-3" href="{{asset('shopping_cart/step01')}}"><i
                                     class="fas fa-shopping-cart" style="font-size: 25px;"></i></a>
                         </li>
                         <li class="nav-item">

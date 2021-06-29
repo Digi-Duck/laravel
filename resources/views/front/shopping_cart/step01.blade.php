@@ -55,53 +55,28 @@
             <div class="order-detail">
                 <h4>訂單明細</h4>
                 <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <img class="rounded-circle" style="width: 60px; height: 60px;" src="./img/food01.jpg"
-                                alt="" />
-                            <div class="food-description ml-2 ">
-                                <p class="m-0">Chicken momo</p>
-                                <p class="m-0 text-muted">#41551</p>
+                    @foreach ($cartProducts as $product)
+                        <div class="row">
+                            <div class="col-12 col-md-6 d-flex align-items-center">
+                                <img class="rounded-circle" style="width: 60px; height: 60px;" src="{{asset($product->attributes->photo)}}"
+                                    alt="" />
+                                <div class="food-description ml-2 ">
+                                    <p class="m-0">{{$product->name}}</p>
+                                    {{-- <p class="m-0 text-muted">#41551</p> --}}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
+                                <div class="quantity ml-1">
+                                    <button type="button" class="btn minus-btn">-</button>
+                                    <input class="qty-input" style="width: 30px;" placeholder="1" value="{{$product->quantity}}" data-price="{{$product->price}}" data-id="{{$product->id}}">
+                                    <button type="button" class="btn plus-btn">+</button>
+                                </div>
+                                <div class="price ml-1" data-price="{{$product->price}}">$ {{number_format($product->price * $product->quantity)}}</div>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
-                            <div class="quantity ml-1"><span>-</span><input type="" style="width: 30px;"
-                                    placeholder="1"><span>+</span></div>
-                            <div class="price ml-1">$10.50</div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <img class="rounded-circle" style="width: 60px; height: 60px;" src="./img/food02.jpg"
-                                alt="" />
-                            <div class="food-description ml-2 ">
-                                <p class="m-0">Spicy Mexican potatoes</p>
-                                <p class="m-0 text-muted">#66999</p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
-                            <div class="quantity ml-1"><span>-</span><input type="" style="width: 30px;"
-                                    placeholder="1"><span>+</span></div>
-                            <div class="price ml-1">$10.50</div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <img class="rounded-circle" style="width: 60px; height: 60px;" src="./img/food03.jpg"
-                                alt="" />
-                            <div class="food-description ml-2 ">
-                                <p class="m-0">Breakfast</p>
-                                <p class="m-0 text-muted">#86577</p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
-                            <div class="quantity ml-1"><span>-</span><input type="" style="width: 30px;"
-                                    placeholder="1"><span>+</span></div>
-                            <div class="price ml-1">$10.50</div>
-                        </div>
-                    </div>
+                        <hr />
+                    @endforeach
+                    
                 </div>
             </div>
             <hr />
@@ -115,10 +90,10 @@
                             <div class="row text-muted">總計：</div>
                         </div>
                         <div class="col-3 d-flex flex-column align-items-end">
-                            <div class="row ">3</div>
-                            <div class="row">$24.90</div>
-                            <div class="row ">$24.90</div>
-                            <div class="row ">$24.90</div>
+                            <div class="row total-qty"></div>
+                            <div class="row sub-total"></div>
+                            <div class="row shipping"></div>
+                            <div class="row total"></div>
                         </div>
                     </div>
                 </div>
@@ -134,5 +109,81 @@
 @endsection
 
 @section('js')
+<script>
+    function updateQty(element,number) {
+        var qtyArea = element.parentElement;
+        var input = qtyArea.querySelector('input');
+        var qty = Number(input.value);
+        var newQty = qty + number;
 
+        //送資料到購物車
+        var formData = new FormData();
+        formData.append('_token','{{csrf_token()}}');
+        formData.append('productId',input.getAttribute('data-id'));
+        formData.append('newQty',newQty);
+
+        fetch('/shopping_cart/update',{
+            'method':'post',
+            'body':formData
+        }).then(function (response) {
+            return response.text();
+        }).then(function (result) {
+            if(result=="success"){
+                if(newQty < 1){
+                    input.value = 1;
+                }else{
+                    input.value = newQty;
+                }
+                var price = qtyArea.nextElementSibling;
+                price.innerText = '$ ' + (price.getAttribute('data-price') * input.value).toLocaleString();
+
+                updateShoppingCart();   
+            }
+        })
+    }
+
+    function updateShoppingCart(params) {
+        var totalQty = 0;
+        var subTotal = 0;
+        var shipping = 0;
+        var total = 0;
+
+        var inputs = document.querySelectorAll('.qty-input');
+        inputs.forEach(function (input) {
+            totalQty += Number(input.value);
+            subTotal += Number(input.value) * input.getAttribute('data-price');
+        });
+        document.querySelector('.total-qty').innerText = totalQty;
+        document.querySelector('.sub-total').innerText = '$ ' + subTotal.toLocaleString();
+
+        if(subTotal > 1000){
+            shipping = 0;
+        }else{
+            shipping = 60;
+        }
+        document.querySelector('.shipping').innerText = '$ ' + shipping;
+        
+        total = subTotal + shipping;
+        document.querySelector('.total').innerText = '$ ' + total.toLocaleString();
+
+    }
+
+    var plusBtns = document.querySelectorAll('.plus-btn');
+    plusBtns.forEach(function (plusBtn) {
+        plusBtn.addEventListener('click',function () {
+            updateQty(this,1);
+        });
+    });
+
+    var minusBtns = document.querySelectorAll('.minus-btn');
+    minusBtns.forEach(function (minusBtn) {
+        minusBtn.addEventListener('click',function () {
+            updateQty(this,-1);
+        });
+    });
+
+    window.addEventListener('load',function () {
+        updateShoppingCart();   
+    });
+</script>
 @endsection

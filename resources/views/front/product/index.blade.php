@@ -28,7 +28,7 @@
                 <div class="card-body">
                   <h5 class="card-title">{{$product->product_name}}</h5>
                   <p class="card-text">{{$product->discript}}</p>
-                  <a href="#" class="btn btn-primary">加入購物車</a>
+                  <button class="btn btn-primary add-btn" data-id="{{$product->id}}">加入購物車</button>
                 </div>
             </div>
           @endforeach
@@ -37,5 +37,27 @@
 @endsection
 
 @section('js')
-    
+    <script>
+      var addBtns = document.querySelectorAll('.add-btn');
+      addBtns.forEach(function (addBtn) {
+        addBtn.addEventListener('click',function () {
+          var productId = this.getAttribute('data-id');
+
+          var formData = new FormData();
+          formData.append('_token','{{csrf_token()}}');
+          formData.append('productId',productId);
+
+          fetch('/shopping_cart/add',{
+            'method':'post',
+            'body':formData
+          }).then(function (response) {
+            return response.text();
+          }).then(function (result) {
+            if(result == "success"){
+              alert('加入成功');
+            }
+          });
+        });
+      })
+    </script>
 @endsection

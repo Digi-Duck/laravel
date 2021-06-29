@@ -20,6 +20,12 @@ Route::prefix('shopping_cart')->group(function () {
     Route::get('step02','FrontController@step02');
     Route::get('step03','FrontController@step03');
     Route::get('step04','FrontController@step04');
+
+    Route::post('add', 'FrontController@add');
+    Route::post('update', 'FrontController@update');
+    Route::get('content', 'FrontController@content');
+    Route::get('clear', 'FrontController@clear');
+
 });
 
 Route::prefix('contact_us')->group(function () {
