@@ -100,8 +100,8 @@
             </div>
             <hr />
             <div class="action-button d-flex justify-content-between align-items-center">
-                <a href="./bootstrap-index.html" class="previous text-body"><i class="fas fa-arrow-left"></i>返回購物</a>
-                <a href="./bootstrap-cart02.html"><button class="btn btn-primary ml-auto btn-lg">下一步</button></a>
+                <a href="{{asset('product')}}" class="previous text-body"><i class="fas fa-arrow-left"></i>返回購物</a>
+                <a href="{{asset('shopping_cart/step02')}}"><button class="btn btn-primary ml-auto btn-lg">下一步</button></a>
             </div>
         </div>
     </div>

@@ -37,6 +37,10 @@ class FrontController extends Controller
     {
         return view('front.shopping_cart.step02');
     }
+    public function paymentCheck(Request $request)
+    {
+        dd($request->all());
+    }
     public function step03()
     {
         return view('front.shopping_cart.step03');

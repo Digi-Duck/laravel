@@ -50,22 +50,23 @@
           </div>
         </div>
         <hr />
-        <div class="payment">
+        <form action="{{asset('shopping_cart/step02/check')}}" method="POST" id="payment" class="payment">
+          @csrf
           <h4>付款方式</h4>
           <div class="container">
             <div class="col">
               <div class="row d-flex align-items-center py-1">
-                <input class="mr-2" type="radio" name="payment" value="CD">
+                <input class="mr-2" type="radio" name="payment" value="Credit" required>
                 <h5 class="m-0">信用卡付款</h5>
               </div>
               <hr />
               <div class="row d-flex align-items-center py-1">
-                <input class="mr-2" type="radio" name="payment" value="ATM">
+                <input class="mr-2" type="radio" name="payment" value="ATM" required>
                 <h5 class="m-0">網路ATM</h5>
               </div>
               <hr />
               <div class="row d-flex align-items-center py-1">
-                <input class="mr-2" type="radio" name="payment" value="CV">
+                <input class="mr-2" type="radio" name="payment" value="CVS" required>
                 <h5 class="m-0">超商代碼</h5>
               </div>
             </div>
@@ -76,18 +77,18 @@
             <div class="container">
               <div class="col">
                 <div class="row d-flex align-items-center py-1">
-                  <input class="mr-2" type="radio" name="shipment" value="BC">
+                  <input class="mr-2" type="radio" name="shipment" value="Home" required>
                   <h5 class="m-0">黑貓宅配</h5>
                 </div>
                 <hr />
                 <div class="row d-flex align-items-center py-1">
-                  <input class="mr-2" type="radio" name="shipment" value="CV">
+                  <input class="mr-2" type="radio" name="shipment" value="C2C" required>
                   <h5 class="m-0">超商店到店</h5>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </form>
         <hr />
         <div class="total-detail">
           <div class="container ">
@@ -109,8 +110,8 @@
         </div>
         <hr />
         <div class="action-button d-flex justify-content-between align-items-center">
-          <a href="./bootstrap-cart01.html"><button class="btn btn-outline-primary btn-lg">上一步</button></a>
-          <a href="./bootstrap-cart03.html"><button class="btn btn-primary btn-lg">下一步</button></a>
+          <a href="./bootstrap-cart01.html" class="btn btn-outline-primary btn-lg">上一步</a>
+          <button class="btn btn-primary btn-lg" id="next">下一步</button>
         </div>
       </div>
     </div>
@@ -118,5 +119,17 @@
 @endsection
 
 @section('js')
-    
+    <script>
+      document.querySelector('#next').addEventListener('click',function () {
+        var paymentBtns = document.querySelector('input[name="payment"]:checked');
+        var shipmentBtns = document.querySelector('input[name="shipment"]:checked');
+        
+        console.log(paymentBtns,shipmentBtns);
+        if(paymentBtns&&shipmentBtns){
+          document.querySelector('#payment').submit();  
+        }else{
+          alert('請先選擇付款及運送方式');
+        }
+      })
+    </script>
 @endsection
