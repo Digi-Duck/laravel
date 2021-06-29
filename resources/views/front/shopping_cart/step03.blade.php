@@ -90,10 +90,10 @@
                                         <div class="row text-muted">總計：</div>
                                     </div>
                                     <div class="col-3 d-flex flex-column align-items-end">
-                                        <div class="row ">3</div>
-                                        <div class="row">$24.90</div>
-                                        <div class="row ">$24.90</div>
-                                        <div class="row ">$24.90</div>
+                                        <div class="row ">{{$qty}}</div>
+                                        <div class="row">$ {{number_format($subTotal)}}</div>
+                                        <div class="row ">$ {{$shippingFee}}</div>
+                                        <div class="row ">$ {{number_format($total)}}</div>
                                     </div>
                                 </div>
                             </div>

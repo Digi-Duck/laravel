@@ -6,6 +6,7 @@ use App\Product;
 use App\ProductType;
 use Dotenv\Result\Success;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class FrontController extends Controller
 {
@@ -35,15 +36,29 @@ class FrontController extends Controller
     }
     public function step02()
     {
-        return view('front.shopping_cart.step02');
+        $qty = \Cart::getTotalQuantity();
+        $subTotal = \Cart::getSubTotal();
+        $shippingFee = \Cart::getSubTotal() > 1000 ? 0 : 60;
+        $total = $subTotal + $shippingFee;
+        return view('front.shopping_cart.step02',compact('qty','subTotal','shippingFee','total'));
     }
     public function paymentCheck(Request $request)
     {
-        dd($request->all());
+        Session::put('payment',$request->payment);
+        Session::put('shipment',$request->shipment);
+        return redirect('/shopping_cart/step03');
     }
     public function step03()
     {
-        return view('front.shopping_cart.step03');
+        if(Session::has('payment') && Session::has('shipment')){
+            $qty = \Cart::getTotalQuantity();
+            $subTotal = \Cart::getSubTotal();
+            $shippingFee = \Cart::getSubTotal() > 1000 ? 0 : 60;
+            $total = $subTotal + $shippingFee;
+            return view('front.shopping_cart.step03',compact('qty','subTotal','shippingFee','total'));
+        }else{
+            return redirect('/shopping_cart/step02');
+        }
     }
     public function step04()
     {

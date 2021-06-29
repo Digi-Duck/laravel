@@ -55,34 +55,40 @@
           <h4>付款方式</h4>
           <div class="container">
             <div class="col">
+              @php
+                  $payment = Session::get('payment');
+              @endphp
               <div class="row d-flex align-items-center py-1">
-                <input class="mr-2" type="radio" name="payment" value="Credit" required>
+                <input class="mr-2" type="radio" name="payment" value="Credit" @if ($payment == "Credit") checked @endif required>
                 <h5 class="m-0">信用卡付款</h5>
               </div>
               <hr />
               <div class="row d-flex align-items-center py-1">
-                <input class="mr-2" type="radio" name="payment" value="ATM" required>
+                <input class="mr-2" type="radio" name="payment" value="ATM" @if ($payment == "ATM") checked @endif required>
                 <h5 class="m-0">網路ATM</h5>
               </div>
               <hr />
               <div class="row d-flex align-items-center py-1">
-                <input class="mr-2" type="radio" name="payment" value="CVS" required>
+                <input class="mr-2" type="radio" name="payment" value="CVS" @if ($payment == "CVS") checked @endif required>
                 <h5 class="m-0">超商代碼</h5>
               </div>
             </div>
           </div>
           <hr />
           <div class="shipment">
+            @php
+              $shipment = Session::get('shipment');
+            @endphp
             <h4>運送方式</h4>
             <div class="container">
               <div class="col">
                 <div class="row d-flex align-items-center py-1">
-                  <input class="mr-2" type="radio" name="shipment" value="Home" required>
+                  <input class="mr-2" type="radio" name="shipment" value="Home" @if ($shipment == "Home") checked @endif required>
                   <h5 class="m-0">黑貓宅配</h5>
                 </div>
                 <hr />
                 <div class="row d-flex align-items-center py-1">
-                  <input class="mr-2" type="radio" name="shipment" value="C2C" required>
+                  <input class="mr-2" type="radio" name="shipment" value="C2C" @if ($shipment == "C2C") checked @endif required>
                   <h5 class="m-0">超商店到店</h5>
                 </div>
               </div>
@@ -100,10 +106,10 @@
                 <div class="row text-muted">總計：</div>
               </div>
               <div class="col-3 d-flex flex-column align-items-end">
-                <div class="row ">3</div>
-                <div class="row">$24.90</div>
-                <div class="row ">$24.90</div>
-                <div class="row ">$24.90</div>
+                <div class="row ">{{$qty}}</div>
+                <div class="row">$ {{number_format($subTotal)}}</div>
+                <div class="row ">$ {{$shippingFee}}</div>
+                <div class="row ">$ {{number_format($total)}}</div>
               </div>
             </div>
           </div>
