@@ -50,34 +50,44 @@
                 </div>
             </div>
             <hr />
-            <div class="payment">
+            <form class="payment">
                 <h4>寄送資料</h4>
                 <div class="container">
-                    <div class="col p-0">
+                    <form action="" method="POST" class="col p-0">
+                        @csrf
                         <div class="row">
-                            <h5>姓名</h5><input type="text" class="form-control" placeholder="王小明" aria-label="Username"
-                                aria-describedby="basic-addon1">
+                            <label for="name">姓名</label>
+                            <input id="name" name="name" type="text" class="form-control" placeholder="王小明">
                         </div>
                         <div class="row">
-                            <h5>電話</h5><input type="text" class="form-control" placeholder="0912345678"
-                                aria-label="Username" aria-describedby="basic-addon1">
+                            <label for="phone">電話</label>
+                            <input id="phone" name="phone" type="text" class="form-control" placeholder="0912345678">
                         </div>
                         <div class="row">
-                            <h5 class="font-weight-normal">E-mail</h5><input type="text" class="form-control"
-                                placeholder="abc123@gmail.com" aria-label="Username" aria-describedby="basic-addon1">
+                            <label class="font-weight-normal" for="email">E-mail</label>
+                            <input id="email" name="email" type="text" class="form-control" placeholder="abc123@gmail.com">
                         </div>
                         <div class="row p-0">
-                            <h5>地址</h5>
+                            <label>地址</label>
                         </div>
                         <div class="col p-0">
-                            <div class="row p-0">
-                                <div class="col-6 p-0"><input type="text" class="form-control" placeholder="城市"
-                                        aria-label="Username" aria-describedby="basic-addon1"></div>
-                                <div class="col-6 p-0"><input type="text" class="form-control" placeholder="郵遞區號"
-                                        aria-label="Username" aria-describedby="basic-addon1"></div>
+                            <div class="row p-0 city-selector-set">
+                                <div class="col-4 p-0">
+                                    <!-- 縣市選單 -->
+                                    <select class="county form-control"></select>
+                                </div>
+                                <div class="col-4 p-0">
+                                     <!-- 區域選單 -->
+                                    <select class="district form-control"></select>
+                                </div>
+                                <div class="col-4 p-0">
+                                    <!-- 郵遞區號欄位 (建議加入 readonly 屬性，防止修改) -->
+                                    <input class="zipcode form-control" type="text" size="3" readonly placeholder="郵遞區號">
+                                </div>
                             </div>
-                            <div class="row py-1"><input type="text" class="form-control" placeholder="地址"
-                                    aria-label="Username" aria-describedby="basic-addon1"></div>
+                            <div class="row py-1">
+                                <input id="address" name="address" type="text" class="form-control" placeholder="地址">
+                            </div>
                         </div>
                         <hr>
                         <div class="total-detail">
@@ -100,11 +110,10 @@
                         </div>
                         <hr />
                         <div class="action-button d-flex justify-content-between align-items-center">
-                            <a href="./bootstrap-cart02.html"><button
-                                    class="btn btn-outline-primary btn-lg">上一步</button></a>
-                            <a href="./bootstrap-cart04.html"><button class="btn btn-primary btn-lg">前往付款</button></a>
+                            <a href="{{asset('/shopping_cart/step02')}}" class="btn btn-outline-primary btn-lg">上一步</a>
+                            <button class="btn btn-primary btn-lg">前往付款</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -113,5 +122,13 @@
 @endsection
 
 @section('js')
-
+<script src="{{asset('js/tw-city-selector.js')}}"></script>
+<script>
+    new TwCitySelector({
+      el: '.city-selector-set',
+      elCounty: '.county', // 在 el 裡查找 element
+      elDistrict: '.district', // 在 el 裡查找 element
+      elZipcode: '.zipcode' // 在 el 裡查找 element
+    });
+  </script>
 @endsection

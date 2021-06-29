@@ -88,7 +88,6 @@ class FrontController extends Controller
         ));
         return 'success';
     }
-
     public function content()
     {
         $cartCollection = \Cart::getContent();
