@@ -176,7 +176,9 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // shoppingcart
-        Darryldecode\Cart\CartServiceProvider::class
+        Darryldecode\Cart\CartServiceProvider::class,
+        //krlove
+        Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,
     ],
 
     /*
