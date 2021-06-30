@@ -50,10 +50,10 @@
                 </div>
             </div>
             <hr />
-            <form class="payment">
+            <form action="{{asset('shopping_cart/step03/check')}}" method="POST" class="payment">
                 <h4>寄送資料</h4>
                 <div class="container">
-                    <form action="" method="POST" class="col p-0">
+                    <div class="col p-0">
                         @csrf
                         <div class="row">
                             <label for="name">姓名</label>
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col-4 p-0">
                                     <!-- 郵遞區號欄位 (建議加入 readonly 屬性，防止修改) -->
-                                    <input class="zipcode form-control" type="text" size="3" readonly placeholder="郵遞區號">
+                                    <input class="zipcode form-control" name="zipcode" type="text" size="3" readonly placeholder="郵遞區號">
                                 </div>
                             </div>
                             <div class="row py-1">
@@ -111,11 +111,11 @@
                         <hr />
                         <div class="action-button d-flex justify-content-between align-items-center">
                             <a href="{{asset('/shopping_cart/step02')}}" class="btn btn-outline-primary btn-lg">上一步</a>
-                            <button class="btn btn-primary btn-lg">前往付款</button>
+                            <button type="submit" class="btn btn-primary btn-lg">前往付款</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

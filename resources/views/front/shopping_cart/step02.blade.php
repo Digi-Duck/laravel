@@ -116,7 +116,7 @@
         </div>
         <hr />
         <div class="action-button d-flex justify-content-between align-items-center">
-          <a href="./bootstrap-cart01.html" class="btn btn-outline-primary btn-lg">上一步</a>
+          <a href="{{asset('shopping_cart/step01')}}" class="btn btn-outline-primary btn-lg">上一步</a>
           <button class="btn btn-primary btn-lg" id="next">下一步</button>
         </div>
       </div>

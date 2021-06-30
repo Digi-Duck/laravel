@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\Product;
+use App\OrderDetail;
 use App\ProductType;
 use Dotenv\Result\Success;
 use Illuminate\Http\Request;
@@ -60,10 +62,50 @@ class FrontController extends Controller
             return redirect('/shopping_cart/step02');
         }
     }
-    public function step04()
+    public function shipmentCheck(Request $request)
     {
-        return view('front.shopping_cart.step04');
+        $cartProducts = \Cart::getContent();
+
+        $order = Order::create([
+            'order_no' => 'DP'.time().rand(1,999),
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'county' => $request->county,
+            'district' => $request->district,
+            'zipcode' => $request->zipcode,
+            'address' => $request->address,
+            'price' => 99999999,
+            'pay_type' => Session::get('payment'),
+            'shipping' => Session::get('shipment'),
+            'shipping_fee' => 99999999,
+            'shipping_status_id' => 0,
+            'order_status_id' => 0,
+        ]);
+
+        $totalPrice = 0;
+        foreach ($cartProducts as $cartProduct) {
+            $product = Product::find($cartProduct->id);
+            $totalPrice += $product->price * $cartProduct->quantity;
+
+            OrderDetail::create([
+                'order_id'=>$order->id,
+                'product_id'=>$product->id,
+                'qty'=>$cartProduct->quantity,
+                'old'=> json_encode($product)
+            ]);
+        }
+
+        $order->update([
+            'price'=>$totalPrice,
+            'shipping_fee' => $totalPrice > 1000 ? 0 : 60,
+        ]);
+
+        \Cart::clear();
+        
+        return view('front.shopping_cart.step04',compact('order'));
     }
+
     public function add(Request $request)
     {
         $product = Product::find($request->productId);

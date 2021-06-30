@@ -20,6 +20,7 @@ Route::prefix('shopping_cart')->group(function () {
     Route::get('step02','FrontController@step02');
     Route::post('step02/check','FrontController@paymentCheck');
     Route::get('step03','FrontController@step03');
+    Route::post('step03/check','FrontController@shipmentCheck');
     Route::get('step04','FrontController@step04');
 
 
