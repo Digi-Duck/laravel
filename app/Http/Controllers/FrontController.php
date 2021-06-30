@@ -8,6 +8,7 @@ use App\OrderDetail;
 use App\ProductType;
 use Dotenv\Result\Success;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class FrontController extends Controller
@@ -101,11 +102,20 @@ class FrontController extends Controller
             'shipping_fee' => $totalPrice > 1000 ? 0 : 60,
         ]);
 
+        Session::forget('payment');
+        Session::forget('shipment');
         \Cart::clear();
         
-        return view('front.shopping_cart.step04',compact('order'));
+        return redirect('/shopping_cart/step04')->with('order',$order);
     }
-
+    public function step04()
+    {
+        if(Session::has('order')){
+            return view('front.shopping_cart.step04');
+        }else{
+            return redirect('/');
+        }
+    }
     public function add(Request $request)
     {
         $product = Product::find($request->productId);
@@ -128,6 +138,11 @@ class FrontController extends Controller
                 'value' => $request->newQty
             ),
         ));
+        return 'success';
+    }
+    public function delete(Request $request)
+    {
+        \Cart::remove($request->productId);
         return 'success';
     }
     public function content()

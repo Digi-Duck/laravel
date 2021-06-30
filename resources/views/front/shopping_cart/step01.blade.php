@@ -1,7 +1,7 @@
 @extends('layouts.template')
 
 @section('css')
-    <link rel="stylesheet" href="{{asset('css/bootstrap-cart01.css')}}">
+<link rel="stylesheet" href="{{asset('css/bootstrap-cart01.css')}}">
 @endsection
 
 @section('main')
@@ -56,27 +56,31 @@
                 <h4>訂單明細</h4>
                 <div class="container">
                     @foreach ($cartProducts as $product)
-                        <div class="row">
-                            <div class="col-12 col-md-6 d-flex align-items-center">
-                                <img class="rounded-circle" style="width: 60px; height: 60px;" src="{{asset($product->attributes->photo)}}"
-                                    alt="" />
-                                <div class="food-description ml-2 ">
-                                    <p class="m-0">{{$product->name}}</p>
-                                    {{-- <p class="m-0 text-muted">#41551</p> --}}
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
-                                <div class="quantity ml-1">
-                                    <button type="button" class="btn minus-btn">-</button>
-                                    <input class="qty-input" style="width: 30px;" placeholder="1" value="{{$product->quantity}}" data-price="{{$product->price}}" data-id="{{$product->id}}">
-                                    <button type="button" class="btn plus-btn">+</button>
-                                </div>
-                                <div class="price ml-1" data-price="{{$product->price}}">$ {{number_format($product->price * $product->quantity)}}</div>
+                    <div class="row">
+                        <div class="col-12 col-md-5 d-flex align-items-center">
+                            <button class="del-btn mr-2" data-id="{{$product->id}}">X</button>
+                            <img class="rounded-circle" style="width: 60px; height: 60px;"
+                                src="{{asset($product->attributes->photo)}}" alt="" />
+                            <div class="food-description ml-2 ">
+                                <p class="m-0">{{$product->name}}</p>
+                                {{-- <p class="m-0 text-muted">#41551</p> --}}
                             </div>
                         </div>
-                        <hr />
+                        <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
+                            <div class="quantity ml-1">
+                                <button type="button" class="btn minus-btn">-</button>
+                                <input class="qty-input" style="width: 30px;" placeholder="1"
+                                    value="{{$product->quantity}}" data-price="{{$product->price}}"
+                                    data-id="{{$product->id}}">
+                                <button type="button" class="btn plus-btn">+</button>
+                            </div>
+                            <div class="price ml-1" data-price="{{$product->price}}">$
+                                {{number_format($product->price * $product->quantity)}}</div>
+                        </div>
+                    </div>
+                    <hr />
                     @endforeach
-                    
+
                 </div>
             </div>
             <hr />
@@ -101,7 +105,8 @@
             <hr />
             <div class="action-button d-flex justify-content-between align-items-center">
                 <a href="{{asset('product')}}" class="previous text-body"><i class="fas fa-arrow-left"></i>返回購物</a>
-                <a href="{{asset('shopping_cart/step02')}}"><button class="btn btn-primary ml-auto btn-lg">下一步</button></a>
+                <a href="{{asset('shopping_cart/step02')}}"><button
+                        class="btn btn-primary ml-auto btn-lg">下一步</button></a>
             </div>
         </div>
     </div>
@@ -179,6 +184,30 @@
     minusBtns.forEach(function (minusBtn) {
         minusBtn.addEventListener('click',function () {
             updateQty(this,-1);
+        });
+    });
+
+    var delBtns = document.querySelectorAll('.del-btn');
+    delBtns.forEach(function (delBtn) {
+        delBtn.addEventListener('click',function () {
+            var productId = this.getAttribute('data-id');
+            var formData = new FormData();
+            formData.append('_token','{{csrf_token()}}');
+            formData.append('productId',productId);
+
+            var delElement = this;
+            fetch('/shopping_cart/delete',{
+                'method':'POST',
+                'body':formData
+            }).then(function (response) {
+                return response.text();
+            }).then(function (result) {
+                if(result == 'success'){
+                    delElement.parentElement.parentElement.remove();
+                    updateShoppingCart();  
+                }
+            })
+
         });
     });
 

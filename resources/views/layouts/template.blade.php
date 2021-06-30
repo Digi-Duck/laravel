@@ -106,6 +106,13 @@
     </header>
 
     <main>
+        @if (Session::has('message'))
+            <div class="container">
+                <div class="alert alert-success" role="alert">
+                    {{ Session::get('message') }}
+                </div>
+            </div>
+        @endif
         @yield('main')
     </main>
 

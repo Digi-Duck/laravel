@@ -5,6 +5,9 @@
 @endsection
 
 @section('main')
+@php
+    $order = Session::get('order');
+@endphp
 <div class="cart-block">
     <div class="cart-detail p-5">
         <div class="shopping-progress ">
@@ -56,50 +59,30 @@
                 <h2 class="text-center font-weight-bold">訂單成立</h2>
                 <h4>訂單明細</h4>
                 <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <img class="rounded-circle" style="width: 60px; height: 60px;" src="./img/food01.jpg"
-                                alt="" />
-                            <div class="food-description ml-2 ">
-                                <p class="m-0">Chicken momo</p>
-                                <p class="m-0 text-muted">#41551</p>
+                    @php
+                        $qty = 0;
+                    @endphp
+                    @foreach ($order->details as $detail)
+                        @php
+                            $product = json_decode($detail->old);
+                            $qty += $detail->qty;
+                        @endphp
+                        <div class="row">
+                            <div class="col-12 col-md-6 d-flex align-items-center">
+                                <img class="rounded-circle" style="width: 60px; height: 60px;" src="{{asset($product->photo)}}"
+                                    alt="" />
+                                <div class="food-description ml-2 ">
+                                    <p class="m-0">{{$product->product_name}}</p>
+                                    {{-- <p class="m-0 text-muted">#41551</p> --}}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
+                                <div class="quantity mr-2">X{{$detail->qty}}</div>
+                                <div class="price ml-1">${{number_format($product->price * $detail->qty)}}</div>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
-                            <div class="quantity mr-2">X1</div>
-                            <div class="price ml-1">$10.50</div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <img class="rounded-circle" style="width: 60px; height: 60px;" src="./img/food02.jpg"
-                                alt="" />
-                            <div class="food-description ml-2 ">
-                                <p class="m-0">Spicy Mexican potatoes</p>
-                                <p class="m-0 text-muted">#66999</p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
-                            <div class="quantity mr-2">X1</div>
-                            <div class="price ml-1">$10.50</div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-12 col-md-6 d-flex align-items-center">
-                            <img class="rounded-circle" style="width: 60px; height: 60px;" src="./img/food03.jpg"
-                                alt="" />
-                            <div class="food-description ml-2 ">
-                                <p class="m-0">Breakfast</p>
-                                <p class="m-0 text-muted">#86577</p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 d-flex align-items-center justify-content-end ">
-                            <div class="quantity mr-2">X1</div>
-                            <div class="price ml-1">$10.50</div>
-                        </div>
-                    </div>
+                        <hr />
+                    @endforeach
                 </div>
             </div>
 
@@ -113,7 +96,7 @@
                             <h5 class="font-weight-normal">姓名</h5>
                         </div>
                         <div class="col-10">
-                            <h5 class="font-weight-normal">王曉明</h5>
+                            <h5 class="font-weight-normal">{{$order->name}}</h5>
                         </div>
                     </div>
                     <div class="row py-2">
@@ -121,7 +104,7 @@
                             <h5 class="font-weight-normal">電話</h5>
                         </div>
                         <div class="col-10">
-                            <h5 class="font-weight-normal">0912345678</h5>
+                            <h5 class="font-weight-normal">{{$order->phone}}</h5>
                         </div>
                     </div>
                     <div class="row py-2">
@@ -129,7 +112,7 @@
                             <h5 class="font-weight-normal">E-mail</h5>
                         </div>
                         <div class="col-10">
-                            <h5 class="font-weight-normal">abc123@gmail.com</h5>
+                            <h5 class="font-weight-normal">{{$order->email}}</h5>
                         </div>
                     </div>
                     <div class="row py-2">
@@ -137,7 +120,7 @@
                             <h5 class="font-weight-normal">地址</h5>
                         </div>
                         <div class="col-10">
-                            <h5 class="font-weight-normal">409 台中市小鎮村英雄路1號</h5>
+                            <h5 class="font-weight-normal">{{$order->zipcode}} {{$order->county.$order->district.$order->address}}</h5>
                         </div>
                     </div>
                 </div>
@@ -152,10 +135,10 @@
                                 <div class="row text-muted">總計：</div>
                             </div>
                             <div class="col-3 d-flex flex-column align-items-end">
-                                <div class="row ">3</div>
-                                <div class="row">$24.90</div>
-                                <div class="row ">$24.90</div>
-                                <div class="row ">$24.90</div>
+                                <div class="row ">{{$qty}}</div>
+                                <div class="row">$ {{number_format($order->price)}}</div>
+                                <div class="row ">$ {{number_format($order->shipping_fee)}}</div>
+                                <div class="row ">$ {{number_format($order->price+$order->shipping_fee)}}</div>
                             </div>
                         </div>
                     </div>

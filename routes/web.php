@@ -17,16 +17,19 @@ Route::get('/', 'FrontController@index');
 
 Route::prefix('shopping_cart')->group(function () {
     Route::get('step01','FrontController@step01');
-    Route::get('step02','FrontController@step02');
-    Route::post('step02/check','FrontController@paymentCheck');
-    Route::get('step03','FrontController@step03');
-    Route::post('step03/check','FrontController@shipmentCheck');
+    Route::middleware(['shopping'])->group(function () {
+        Route::get('step02','FrontController@step02');
+        Route::post('step02/check','FrontController@paymentCheck');
+        Route::get('step03','FrontController@step03');
+        Route::post('step03/check','FrontController@shipmentCheck');
+    });
     Route::get('step04','FrontController@step04');
 
 
     // shopping cart
     Route::post('add', 'FrontController@add');
     Route::post('update', 'FrontController@update');
+    Route::post('delete','FrontController@delete');
     Route::get('content', 'FrontController@content');
     Route::get('clear', 'FrontController@clear');
 });
